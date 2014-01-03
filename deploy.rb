@@ -3,7 +3,7 @@
 # Josh Campbell
 # https://github.com/irlrobot/
 #
-# This is v1.0
+# This is v2.0
 #
 # deploy.rb sequentially runs commands on one or more hosts in the specified order.
 #
@@ -26,9 +26,11 @@
 require 'rubygems'
 require 'net/ssh'
 
-def ssh_exec(hostname, username, command)
+def ssh_exec(hostname, username, *commands)
   ssh = Net::SSH.start(hostname, username)
-  ssh.open_channel do |channel|
+
+  commands.each do |command|
+    ssh.open_channel do |channel|
       channel.request_pty do |c, success|
         if success
           c.exec(command)
@@ -40,6 +42,7 @@ def ssh_exec(hostname, username, command)
         end
       end
     end
+  end
   ssh.close()
 end
 
@@ -56,7 +59,7 @@ if ARGV.size > 0
     begin
       ssh_exec(host, current_user, command)
     rescue
-      puts "Can't connect to #{host.split[1]}"
+      puts "Can't connect to #{host}. Check host or credentials."
     end
   end
 else
@@ -66,16 +69,17 @@ else
     puts "--------------------------------------------------"
     puts "--------------------------------------------------"
     puts "Deploying to #{hostname}"
+    puts "--------------------------------------------------"
 
+    commands = []
     File.open("commands.txt").each_line do |command|
-      puts "--------------------------------------------------"
-      puts command  
-      puts "--------------------------------------------------"
-      begin
-        ssh_exec(hostname, username, command)
-      rescue
-        puts "Can't connect to #{host.split[1]}"
-      end
-    end 
+      commands.push(command)
+    end  
+    
+    begin
+      ssh_exec(hostname, username, *commands)
+    rescue
+      puts "Can't connect to #{host.split[1]}. Check host or credentials."
+    end
   end
 end
