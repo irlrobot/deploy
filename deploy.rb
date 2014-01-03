@@ -55,9 +55,8 @@ if ARGV.size > 0
     puts "--------------------------------------------------"
     begin
       ssh_exec(host, current_user, command)
-      raise
     rescue
-      puts "Can't connect to #{host}"
+      puts "Can't connect to #{host.split[1]}"
     end
   end
 else
@@ -74,9 +73,8 @@ else
       puts "--------------------------------------------------"
       begin
         ssh_exec(hostname, username, command)
-        raise
       rescue
-        puts "Can't connect to #{host}"
+        puts "Can't connect to #{host.split[1]}"
       end
     end 
   end
