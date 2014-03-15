@@ -55,7 +55,7 @@ if ARGV.size > 0
     puts "Connecting to #{host}"
     puts "--------------------------------------------------"
     begin
-      puts "Running #{command}..."
+      puts "Running '#{command}'"
       puts "--------------------------------------------------"
       ssh_exec(host, current_user, command)
     rescue
@@ -81,7 +81,7 @@ else
     end  
     
     begin
-      puts "Running #{commands}..."
+      puts "Running '#{commands}'"
       puts "--------------------------------------------------"
       ssh_exec(hostname, username, commands)
     rescue
