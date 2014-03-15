@@ -5,13 +5,13 @@
 #
 # This is v2.0
 #
-# deploy.rb sequentially runs commands on one or more hosts in the specified order.
+# dothisonthat sequentially runs commands on one or more hosts in the specified order.
 #
 # Specify a command followed by multiple hosts to run that command on all the hosts.
-# Example: ./deploy.rb uptime host1 host2 host3
-# Example: ./deploy.rb "sudo yum update -y" host1 host2 host3
+# Example: ./dothisonthat.rb uptime host1 host2 host3
+# Example: ./dothisonthat.rb "sudo yum update -y" host1 host2 host3
 #
-# Otherwise deploy.rb expects hosts.txt and commands.txt in same directory to specify commands and hosts.
+# Otherwise dothisonthat.rb expects hosts.txt and commands.txt in same directory to specify commands and hosts.
 #
 # hosts.txt
 # On each line put the username with access followed by a space and then the hostname.
@@ -26,20 +26,18 @@
 require 'rubygems'
 require 'net/ssh'
 
-def ssh_exec(hostname, username, *commands)
+def ssh_exec(hostname, username, command)
   ssh = Net::SSH.start(hostname, username)
 
-  commands.each do |command|
-    ssh.open_channel do |channel|
-      channel.request_pty do |c, success|
-        if success
-          c.exec(command)
-          c.on_data do |ch, data|
-            puts data
-          end
-        else
-          puts "Failed to connect!"
+  ssh.open_channel do |channel|
+    channel.request_pty do |c, success|
+      if success
+        c.exec(command)
+        c.on_data do |ch, data|
+          puts data
         end
+      else
+        puts "Failed to connect!"
       end
     end
   end
@@ -54,9 +52,11 @@ if ARGV.size > 0
   hosts.each do |host|
     puts "--------------------------------------------------"
     puts "--------------------------------------------------"
-    puts "Deploying to #{host}"
+    puts "Connecting to #{host}"
     puts "--------------------------------------------------"
     begin
+      puts "Running #{command}..."
+      puts "--------------------------------------------------"
       ssh_exec(host, current_user, command)
     rescue
       puts "Can't connect to #{host}. Check host or credentials."
@@ -68,16 +68,22 @@ else
     hostname = host.split[1]
     puts "--------------------------------------------------"
     puts "--------------------------------------------------"
-    puts "Deploying to #{hostname}"
+    puts "Connecting to #{hostname}"
     puts "--------------------------------------------------"
 
-    commands = []
+    commands = ""
     File.open("commands.txt").each_line do |command|
-      commands.push(command)
+      if commands == ""
+        commands = commands + command.chomp
+      else
+        commands = commands + " && #{command.chomp}"
+      end
     end  
     
     begin
-      ssh_exec(hostname, username, *commands)
+      puts "Running #{commands}..."
+      puts "--------------------------------------------------"
+      ssh_exec(hostname, username, commands)
     rescue
       puts "Can't connect to #{host.split[1]}. Check host or credentials."
     end
