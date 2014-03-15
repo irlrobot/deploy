@@ -1,26 +1,9 @@
 #!/usr/bin/env ruby
 #
 # Josh Campbell
-# https://github.com/irlrobot/
+# https://github.com/irlrobot/dothisonthat
 #
-# This is v2.0
-#
-# dothisonthat sequentially runs commands on one or more hosts in the specified order.
-#
-# Specify a command followed by multiple hosts to run that command on all the hosts.
-# Example: ./dothisonthat.rb uptime host1 host2 host3
-# Example: ./dothisonthat.rb "sudo yum update -y" host1 host2 host3
-#
-# Otherwise dothisonthat.rb expects hosts.txt and commands.txt in same directory to specify commands and hosts.
-#
-# hosts.txt
-# On each line put the username with access followed by a space and then the hostname.
-# You should have public key authentication already setup on the host for the user specified,
-# For example "josh splunk01.domain"
-#
-# commands.txt
-# Each command should be on one line, Commands are run sequentially not in parrallel (by design).
-# For example "sudo yum update -y"
+# This is v2.1
 #
 
 require 'rubygems'
