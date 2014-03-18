@@ -3,33 +3,27 @@
 # Josh Campbell
 # https://github.com/irlrobot/dothisonthat
 #
-# This is v2.1
+# This is v3.0
 #
 
 require 'rubygems'
 require 'net/ssh'
 
-def ssh_exec(hostname, username, command)
-  ssh = Net::SSH.start(hostname, username)
-
-  ssh.open_channel do |channel|
-    channel.request_pty do |c, success|
-      if success
-        c.exec(command)
-        c.on_data do |ch, data|
-          puts data
-        end
-      else
-        puts "Failed to connect!"
-      end
+def ssh_exec(hostname, username, commands)
+  Net::SSH.start(hostname, username) do |ssh|
+    commands.each do |command|
+      puts command
+      result = ssh.exec!(command)
+      puts result
+      puts "--------------------------------------------------"
     end
-  end
-  ssh.close()
+end
+
 end
 
 if ARGV.size > 0
   current_user = ENV['USER']
-  command = ARGV[0]
+  command = [ARGV[0]]
   hosts = ARGV[1..ARGV.size]
   
   hosts.each do |host|
@@ -54,13 +48,9 @@ else
     puts "Connecting to #{hostname}"
     puts "--------------------------------------------------"
 
-    commands = ""
+    commands = []
     File.open("commands.txt").each_line do |command|
-      if commands == ""
-        commands = commands + command.chomp
-      else
-        commands = commands + " && #{command.chomp}"
-      end
+      commands.push(command.chomp)
     end  
     
     begin
