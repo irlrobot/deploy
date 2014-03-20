@@ -4,7 +4,7 @@ dothisonthat.rb sequentially runs plain shell commands on one or more hosts in t
 #Usage
 ./dothisonthat.rb --help<p>
 
-Specify commands followed by multiple hosts to run commands, sequentially, on all hosts in specified order.<br>
+Specify commands followed by multiple hosts to run commands, sequentially, on all hosts in specified order.  Uses the currently logged in, local user as the username on the target systems.<br>
 Example: ./dothisonthat.rb -c uptime,w,"ls -lah /" -w host1,host2,host3<br>
 Example: ./dothisonthat.rb -c "sudo yum update -y" -w host1,host2<br>
 
