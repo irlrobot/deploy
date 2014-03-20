@@ -1,5 +1,5 @@
 #About 
-dothisonthat.rb sequentially runs commands on one or more hosts in the specified order.  You need SSH public key authentication already setup on the target hosts.  You can run a single command across multiple hosts by running dothisonthat.rb from the command line with arguments, or you can feed dothisonthat.rb a list of commands and hosts by using some helper files.  See the Usage section below for more information.
+dothisonthat.rb sequentially runs plain shell commands on one or more hosts in the specified order.  You need SSH public key authentication already setup on the target hosts.  You can run a single command across multiple hosts by running dothisonthat.rb from the command line with arguments, or you can feed dothisonthat.rb a list of commands and hosts by using some helper files.  See the Usage section below for more information.
 
 #Usage
 ./dothisonthat.rb --help<p>
