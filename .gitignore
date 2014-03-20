@@ -6,5 +6,5 @@
 .idea
 
 # Config Files
-commands.txt
-hosts.txt
+do_this.txt
+on_that.txt

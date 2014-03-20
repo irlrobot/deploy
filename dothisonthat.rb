@@ -8,6 +8,7 @@
 
 require 'rubygems'
 require 'net/ssh'
+require 'optparse'
 
 def ssh_exec(hostname, username, commands)
   Net::SSH.start(hostname, username) do |ssh|
@@ -16,31 +17,54 @@ def ssh_exec(hostname, username, commands)
       result = ssh.exec!(command)
       puts result
       puts "--------------------------------------------------"
-    end
-end
+    end # commands.each
+  end # Net::SSH.start
+end # ssh_exec
 
-end
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: ./dothisonthat.rb [options]"
 
-if ARGV.size > 0
-  current_user = ENV['USER']
-  command = [ARGV[0]]
-  hosts = ARGV[1..ARGV.size]
-  
-  hosts.each do |host|
+  opts.on("-h", "--help", "Show this message") do 
+    puts opts
+    exit
+  end
+
+  opts.on("-c", "--command COMMAND1,COMMAND2", Array, "Specify commands to run, use with -w") do |c|
+    options[:commands] = c
+  end
+
+  opts.on("-w", "--hosts HOST1,HOST2", Array, "Hosts to run the command on, use with -c") do |w|
+    options[:hosts] = w
+  end
+
+  opts.on("-d", "--do_this FILE_PATH", String, "Specify a command file, use with -o") do |d|
+    options[:command_file] = d
+  end
+
+  opts.on("-o", "--on_that FILE_PATH", String, "Specify a server file, use with -d") do |o|
+    options[:server_file] = o
+  end
+end.parse!(ARGV)
+
+current_user = ENV['USER']
+
+if options[:commands] && options[:hosts]
+  options[:hosts].each do |host|
     puts "--------------------------------------------------"
     puts "--------------------------------------------------"
     puts "Connecting to #{host}"
     puts "--------------------------------------------------"
     begin
-      puts "Running '#{command}'"
+      puts "Running #{options[:commands]}"
       puts "--------------------------------------------------"
-      ssh_exec(host, current_user, command)
+      ssh_exec(host, current_user, options[:commands])
     rescue
       puts "Can't connect to #{host}. Check host or credentials."
     end
   end
-else
-  File.open("hosts.txt").each_line do |host|
+elsif options[:command_file] && options[:server_file]
+  File.open(options[:server_file]).each_line do |host|
     username = host.split[0]
     hostname = host.split[1]
     puts "--------------------------------------------------"
@@ -49,7 +73,7 @@ else
     puts "--------------------------------------------------"
 
     commands = []
-    File.open("commands.txt").each_line do |command|
+    File.open(options[:command_file]).each_line do |command|
       commands.push(command.chomp)
     end  
     
@@ -61,4 +85,6 @@ else
       puts "Can't connect to #{host.split[1]}. Check host or credentials."
     end
   end
+else
+  puts "Invalid arguments, use --help for usage information."
 end
