@@ -23,7 +23,7 @@ end # ssh_exec
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: ./dothisonthat.rb [options]"
+  opts.banner = "Do This On That (dtot)\nUsage: dtot [options]"
 
   opts.on("-h", "--help", "Show this message") do 
     puts opts
