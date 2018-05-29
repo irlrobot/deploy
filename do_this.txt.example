@@ -1,3 +1,0 @@
-w
-sudo yum update -y
-cat /etc/redhat-release

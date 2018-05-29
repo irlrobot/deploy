@@ -3,7 +3,7 @@
 # Josh Campbell
 # https://github.com/irlrobot/dothisonthat
 #
-# This is v3.0
+# This is v1.0.0
 #
 
 require 'rubygems'
