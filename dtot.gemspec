@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
     spec.name = 'dtot'
-    spec.version = '1.0.0'
+    spec.version = '1.0.1'
     spec.date = '2018-05-28'
     spec.summary = 'Do This On That'
     spec.description = 'Do This On That (dtot) sequentially runs commands on one or more hosts in the specified order.'
