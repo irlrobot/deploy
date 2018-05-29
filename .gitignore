@@ -55,7 +55,3 @@ Gemfile.lock
 .project
 .DS_Store
 .idea
-
-# Config Files
-do_this.txt
-on_that.txt
