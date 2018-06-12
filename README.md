@@ -19,3 +19,21 @@ Each command should be on one line; commands are run sequentially, not in parral
 
 ## on_that.txt
 On each line put the username with access followed by a space and then the hostname.  You should have public key authentication already setup on the host for the user specified.  See the example on_that.txt in the examples directory of this repository.
+
+# Docker
+First, retrieve the image from Docker Hub:
+```
+docker pull irlrobot/dtot
+```
+
+Next, create your do_this and on_that files in a directory on your local machine. I typically just use ~/Desktop on my Mac. 
+
+Finally, run the below from the directory where your do_this and on_that files are located:
+```
+docker run --rm \
+    -v ~/.ssh/id_rsa:/root/.ssh/id_rsa \
+    -v ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub \
+    -v ~/Desktop/do_this:/dtot/commands \
+    -v ~/Desktop/on_that:/dtot/hosts \
+    dtot
+```
