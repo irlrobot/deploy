@@ -37,3 +37,5 @@ docker run --rm \
     -v ~/Desktop/on_that:/dtot/hosts \
     dtot
 ```
+
+NOTE: The Docker image currently only supports SSH keys without a passphrase.
