@@ -12,13 +12,13 @@ Specify commands followed by multiple hosts to run commands, sequentially, on al
 ```dtot -c "sudo yum update -y" -w host1,host2```
 
 Or, use "do this" and "on that" files:<br>
-```dtot -d do_this.txt -o on_that.txt```
+```dtot -d do_this -o on_that```
 
-## do_this.txt
-Each command should be on one line; commands are run sequentially, not in parrallel (by design).  See the example do_this.txt in the examples directory of this repository.
+## do_this
+Each command should be on one line; commands are run sequentially, not in parrallel (by design).  See the example do_this in the examples directory of this repository.
 
-## on_that.txt
-On each line put the username with access followed by a space and then the hostname.  You should have public key authentication already setup on the host for the user specified.  See the example on_that.txt in the examples directory of this repository.
+## on_that
+On each line put the username with access followed by a space and then the hostname.  You should have public key authentication already setup on the host for the user specified.  See the example on_that in the examples directory of this repository.
 
 # Docker
 First, retrieve the image from Docker Hub:
